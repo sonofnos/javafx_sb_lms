@@ -22,7 +22,7 @@ public class BookService {
     public BookService() {
 
         this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(3))
+                .connectTimeout(Duration.ofSeconds(2))
                 .build();
 
 

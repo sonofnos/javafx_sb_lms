@@ -84,12 +84,12 @@ public class LibraryManagementApp extends Application {
         
         new Thread(() -> {
             try {
-                Thread.sleep(500); 
+                Thread.sleep(1000); 
                 Platform.runLater(() -> loadBooks());
             } catch (InterruptedException e) {
                 // Ignore
             }
-        }).start();
+        }, "BookLoader").start();
     }
 
  
@@ -403,6 +403,12 @@ public class LibraryManagementApp extends Application {
     }
 
     private void loadBooks() {
+        
+        Label statsLabel = (Label) primaryStage.getScene().lookup("#statsLabel");
+        if (statsLabel != null) {
+            statsLabel.setText("Loading books...");
+        }
+        
         new Thread(() -> {
             try {
                 var books = bookService.getAllBooks();
@@ -413,9 +419,14 @@ public class LibraryManagementApp extends Application {
                     
                 });
             } catch (Exception e) {
-                Platform.runLater(() -> showError("Failed to load books: " + e.getMessage()));
+                Platform.runLater(() -> {
+                    showError("Failed to load books: " + e.getMessage());
+                    if (statsLabel != null) {
+                        statsLabel.setText("Total Books: 0 (Backend offline)");
+                    }
+                });
             }
-        }).start();
+        }, "BookFetcher").start();
     }
 
     /**
