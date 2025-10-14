@@ -132,7 +132,7 @@ public class LibraryManagementApp extends Application {
         searchPanel.setStyle("-fx-background-color: white; " +
                             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);");
 
-        Label searchLabel = new Label("🔍 Search:");
+        Label searchLabel = new Label("Search:");
         searchLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
         searchField = new TextField();
@@ -179,7 +179,7 @@ public class LibraryManagementApp extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        refreshButton = new Button("🔄 Refresh");
+        refreshButton = new Button("Refresh");
         refreshButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; " +
                               "-fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 5; " +
                               "-fx-cursor: hand; -fx-font-weight: bold;");
@@ -207,7 +207,7 @@ public class LibraryManagementApp extends Application {
                          "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);");
         VBox.setMargin(tableBox, new Insets(20, 20, 20, 20));
 
-        Label tableLabel = new Label("📖 Book Collection");
+        Label tableLabel = new Label("Book Collection");
         tableLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
         bookTableView = new TableView<>();
@@ -276,7 +276,7 @@ public class LibraryManagementApp extends Application {
                           "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);");
         VBox.setMargin(formPanel, new Insets(20, 20, 20, 0));
 
-        Label formLabel = new Label("✏️ Book Details");
+        Label formLabel = new Label("Book Details");
         formLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
 
@@ -330,21 +330,21 @@ public class LibraryManagementApp extends Application {
         VBox buttonBox = new VBox(12);
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
-        addButton = new Button("➕ Add Book");
+        addButton = new Button("Add Book");
         styleButton(addButton, "#667eea", "#5568d3", true);
         addButton.setOnAction(e -> addBook());
 
-        updateButton = new Button("📝 Update Book");
+        updateButton = new Button("Update Book");
         styleButton(updateButton, "#FF9800", "#e68900", true);
         updateButton.setDisable(true);
         updateButton.setOnAction(e -> updateBook());
 
-        deleteButton = new Button("🗑️ Delete Book");
+        deleteButton = new Button("Delete Book");
         styleButton(deleteButton, "#f44336", "#da190b", true);
         deleteButton.setDisable(true);
         deleteButton.setOnAction(e -> deleteBook());
 
-        clearButton = new Button("🔄 Clear Form");
+        clearButton = new Button("Clear Form");
         styleButton(clearButton, "#607D8B", "#546E7A", false);
         clearButton.setOnAction(e -> clearForm());
 
@@ -385,7 +385,7 @@ public class LibraryManagementApp extends Application {
         statusBar.setStyle("-fx-background-color: #2c3e50; " +
                           "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, -2);");
 
-        Label statusLabel = new Label("🟢 Connected to Backend");
+        Label statusLabel = new Label("Connected to Backend");
         statusLabel.setId("statusLabel");
         statusLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-size: 13px; -fx-font-weight: bold;");
 
@@ -424,7 +424,7 @@ public class LibraryManagementApp extends Application {
     private void updateBookCount() {
         Label statsLabel = (Label) bookTableView.getScene().lookup("#statsLabel");
         if (statsLabel != null) {
-            statsLabel.setText("📚 Total Books: " + bookList.size());
+            statsLabel.setText("Total Books: " + bookList.size());
         }
     }
 
