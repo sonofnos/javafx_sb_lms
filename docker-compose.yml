@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: library-backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Spring Boot Configuration
+      - SPRING_PROFILES_ACTIVE=docker
+      # H2 Database Configuration
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:librarydb
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.h2.Driver
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=
+      # JPA Configuration
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.H2Dialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - SPRING_JPA_SHOW_SQL=false
+      # H2 Console
+      - SPRING_H2_CONSOLE_ENABLED=true
+      - SPRING_H2_CONSOLE_PATH=/h2-console
+      # CORS Configuration
+      - CORS_ALLOWED_ORIGINS=http://localhost:*
+    networks:
+      - library-network
+    restart: unless-stopped
+    labels:
+      - "com.library.description=Library Management System Backend"
+      - "com.library.version=1.0.0"
+
+networks:
+  library-network:
+    driver: bridge
+    name: library-network

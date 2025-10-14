@@ -1,0 +1,73 @@
+# Library Management System API Tests
+# Use with VS Code REST Client extension
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### Get All Books
+GET {{baseUrl}}/api/books HTTP/1.1
+
+### Get Book by ID (change ID as needed)
+GET {{baseUrl}}/api/books/1 HTTP/1.1
+
+### Search Books by Title or Author
+GET {{baseUrl}}/api/books?search=Java HTTP/1.1
+
+### Get Books with Pagination
+GET {{baseUrl}}/api/books?page=0&size=5 HTTP/1.1
+
+### Create New Book
+POST {{baseUrl}}/api/books HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "title": "The Pragmatic Programmer: Your Journey to Mastery",
+    "author": "Andrew Hunt, David Thomas",
+    "isbn": "978-0135957059",
+    "publishedDate": "2019-09-13"
+}
+
+### Create Another Book Example
+POST {{baseUrl}}/api/books HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "title": "Refactoring: Improving the Design of Existing Code",
+    "author": "Martin Fowler",
+    "isbn": "978-0134757599",
+    "publishedDate": "2018-11-19"
+}
+
+### Update Existing Book (change ID as needed)
+PUT {{baseUrl}}/api/books/1 HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "title": "Clean Code: A Handbook of Agile Software Craftsmanship (Updated)",
+    "author": "Robert C. Martin",
+    "isbn": "978-0132350884",
+    "publishedDate": "2008-08-01"
+}
+
+### Delete Book (change ID as needed)
+DELETE {{baseUrl}}/api/books/1 HTTP/1.1
+
+### Test Invalid Book Creation (missing required fields)
+POST {{baseUrl}}/api/books HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "title": "Incomplete Book"
+}
+
+### Test Invalid ISBN Format
+POST {{baseUrl}}/api/books HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "title": "Test Book",
+    "author": "Test Author",
+    "isbn": "",
+    "publishedDate": "2025-01-01"
+}
