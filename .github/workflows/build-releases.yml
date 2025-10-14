@@ -1,0 +1,170 @@
+name: Build Native Installers
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'maven'
+        
+    - name: Build Backend
+      run: |
+        cd backend
+        mvn clean install -DskipTests
+        
+    - name: Build Frontend
+      run: |
+        cd frontend
+        mvn clean package -DskipTests
+        
+    - name: Create macOS Application Bundle
+      run: |
+        cd frontend
+        mkdir -p target/libs
+        cp target/library-management-frontend-1.0.0.jar target/libs/
+        
+        jpackage \
+          --name "CBA LMS Test" \
+          --app-version 1.0.0 \
+          --vendor "CBA" \
+          --type app-image \
+          --input target/libs \
+          --main-jar library-management-frontend-1.0.0.jar \
+          --main-class com.library.LibraryManagementApp \
+          --dest target/dist \
+          --mac-package-name "CBA LMS Test" \
+          --mac-package-identifier "com.library.cba-lms-test" \
+          --java-options '-Xmx512m'
+          
+    - name: Create macOS DMG Installer
+      run: |
+        cd frontend
+        jpackage \
+          --name "CBA LMS Test" \
+          --app-version 1.0.0 \
+          --vendor "CBA" \
+          --type dmg \
+          --app-image "target/dist/CBA LMS Test.app" \
+          --dest target/dist \
+          --mac-package-name "CBA LMS Test"
+          
+    - name: Upload macOS Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-installer
+        path: |
+          frontend/target/dist/*.dmg
+        retention-days: 30
+
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'maven'
+        
+    - name: Build Backend
+      run: |
+        cd backend
+        mvn clean install -DskipTests
+        
+    - name: Build Frontend
+      run: |
+        cd frontend
+        mvn clean package -DskipTests
+        
+    - name: Create Windows Application
+      run: |
+        cd frontend
+        mkdir -p target/libs
+        copy target\library-management-frontend-1.0.0.jar target\libs\
+        
+        jpackage `
+          --name "CBA LMS Test" `
+          --app-version 1.0.0 `
+          --vendor "CBA" `
+          --type app-image `
+          --input target\libs `
+          --main-jar library-management-frontend-1.0.0.jar `
+          --main-class com.library.LibraryManagementApp `
+          --dest target\dist `
+          --win-dir-chooser `
+          --win-menu `
+          --win-shortcut `
+          --java-options "-Xmx512m"
+          
+    - name: Create Windows MSI Installer
+      run: |
+        cd frontend
+        jpackage `
+          --name "CBA LMS Test" `
+          --app-version 1.0.0 `
+          --vendor "CBA" `
+          --type msi `
+          --app-image "target\dist\CBA LMS Test" `
+          --dest target\dist `
+          --win-dir-chooser `
+          --win-menu `
+          --win-shortcut
+          
+    - name: Upload Windows Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-installer
+        path: |
+          frontend/target/dist/*.msi
+        retention-days: 30
+
+  create-release:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download macOS Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: macos-installer
+        path: ./installers
+        
+    - name: Download Windows Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: windows-installer
+        path: ./installers
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./installers/*.dmg
+          ./installers/*.msi
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
