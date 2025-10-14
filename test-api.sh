@@ -21,7 +21,7 @@ echo ""
 echo -e "${YELLOW}Test 2: Get All Books${NC}"
 books=$(curl -s ${BASE_URL}/api/books | python3 -m json.tool)
 count=$(echo "$books" | grep -c "\"id\":" || true)
-echo -e "${GREEN}✅ Retrieved $count books${NC}"
+echo -e "${GREEN}Retrieved $count books${NC}"
 echo ""
 
 # Test 3: Get Book by ID
@@ -29,7 +29,7 @@ echo -e "${YELLOW}Test 3: Get Book by ID (ID=1)${NC}"
 book=$(curl -s ${BASE_URL}/api/books/1)
 if echo "$book" | grep -q "\"id\""; then
     title=$(echo "$book" | python3 -c "import sys, json; print(json.load(sys.stdin)['title'])" 2>/dev/null || echo "Unknown")
-    echo -e "${GREEN}✅ Retrieved book: $title${NC}"
+    echo -e "${GREEN}Retrieved book: $title${NC}"
 else
     echo -e "${RED}❌ Failed to retrieve book${NC}"
 fi
@@ -39,7 +39,7 @@ echo ""
 echo -e "${YELLOW}Test 4: Search Books (query='Java')${NC}"
 results=$(curl -s "${BASE_URL}/api/books?search=Java")
 search_count=$(echo "$results" | grep -c "\"id\":" || true)
-echo -e "${GREEN}✅ Found $search_count matching books${NC}"
+echo -e "${GREEN}Found $search_count matching books${NC}"
 echo ""
 
 # Test 5: Create New Book
@@ -55,7 +55,7 @@ response=$(curl -s -X POST ${BASE_URL}/api/books \
     -d "$new_book")
 if echo "$response" | grep -q "\"id\""; then
     new_id=$(echo "$response" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])" 2>/dev/null || echo "Unknown")
-    echo -e "${GREEN}✅ Created book with ID: $new_id${NC}"
+    echo -e "${GREEN}Created book with ID: $new_id${NC}"
     
     # Test 6: Update the newly created book
     echo ""
@@ -70,7 +70,7 @@ if echo "$response" | grep -q "\"id\""; then
         -H "Content-Type: application/json" \
         -d "$updated_book")
     if echo "$update_response" | grep -q "Updated"; then
-        echo -e "${GREEN}✅ Successfully updated book${NC}"
+        echo -e "${GREEN}Successfully updated book${NC}"
     else
         echo -e "${RED}❌ Failed to update book${NC}"
     fi
@@ -80,7 +80,7 @@ if echo "$response" | grep -q "\"id\""; then
     echo -e "${YELLOW}Test 7: Delete Book (ID=$new_id)${NC}"
     delete_status=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE ${BASE_URL}/api/books/$new_id)
     if [ "$delete_status" = "204" ] || [ "$delete_status" = "200" ]; then
-        echo -e "${GREEN}✅ Successfully deleted book (HTTP $delete_status)${NC}"
+        echo -e "${GREEN}Successfully deleted book (HTTP $delete_status)${NC}"
     else
         echo -e "${RED}❌ Failed to delete book (HTTP $delete_status)${NC}"
     fi
@@ -90,4 +90,4 @@ fi
 
 echo ""
 echo -e "${BLUE}=========================================${NC}"
-echo -e "${GREEN}✅ All tests completed!${NC}"
+echo -e "${GREEN}All tests completed!${NC}"

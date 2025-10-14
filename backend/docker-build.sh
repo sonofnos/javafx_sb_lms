@@ -43,7 +43,7 @@ docker build \
     .
 
 echo ""
-echo -e "${GREEN}✅ Docker image built successfully!${NC}"
+echo -e "${GREEN}Docker image built successfully!${NC}"
 echo ""
 
 # Display image information

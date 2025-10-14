@@ -22,7 +22,7 @@ Automatically builds native installers for macOS and Windows.
 
 ## Prerequisites
 
-> **⚠️ IMPORTANT**: The backend server must be running on `http://localhost:8080` before launching the frontend application. The installers only package the frontend - you need to start the backend separately.
+> **IMPORTANT**: The backend server must be running on `http://localhost:8080` before launching the frontend application. The installers only package the frontend - you need to start the backend separately.
 
 To start the backend:
 ```bash
@@ -161,7 +161,7 @@ To customize the build:
 
 ## Cost
 
-For public repositories: **FREE** ✅
+For public repositories: **FREE**
 - Unlimited build minutes
 - Unlimited artifact storage (30-day retention)
 
@@ -172,10 +172,10 @@ For private repositories:
 ## Security
 
 Build artifacts are:
-- ✅ Scanned by GitHub
-- ✅ Stored securely
-- ✅ Only accessible to repository collaborators
-- ✅ Available for download for 30 days
+- Scanned by GitHub
+- Stored securely
+- Only accessible to repository collaborators
+- Available for download for 30 days
 
 ## Next Steps
 

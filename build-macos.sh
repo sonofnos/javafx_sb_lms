@@ -52,7 +52,7 @@ cd ..
 
 echo ""
 echo "=================================="
-echo "✅ Build Complete!"
+echo "Build Complete!"
 echo "=================================="
 echo ""
 echo "Output location: frontend/target/dist/"
