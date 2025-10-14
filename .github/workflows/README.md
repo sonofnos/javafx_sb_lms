@@ -1,185 +1,150 @@
 # GitHub Actions - Automated Builds
 
-This directory contains GitHub Actions workflows for automated building and releasing of the CBA LMS Test application.
-
 ## Workflows
 
-### `build-releases.yml` - Native Installer Builder
+### `build-releases.yml`
 
-Automatically builds native installers for macOS and Windows.
+Builds native installers for macOS and Windows.
 
 **Triggers:**
-- Push to `main` branch
-- Pull requests to `main` branch
-- Creating a version tag (e.g., `v1.0.0`)
-- Manual workflow dispatch
 
-**What it builds:**
-- **macOS**: `.dmg` installer (~67 MB)
-- **Windows**: `.msi` installer (~70 MB)
+- Push to `main`
+- Pull requests
+- Version tags (e.g., `v1.0.0`)
+- Manual dispatch
 
-**Build artifacts are stored for 30 days**
+**Output:**
+
+- macOS: `.dmg` installer
+- Windows: `.msi` installer
+- Artifacts stored for 30 days
 
 ## Prerequisites
 
-> **IMPORTANT**: The backend server must be running on `http://localhost:8080` before launching the frontend application. The installers only package the frontend - you need to start the backend separately.
+> **IMPORTANT**: Backend must run on `http://localhost:8080` before launching the frontend. Installers only package the frontend.
 
-To start the backend:
+Start backend:
+
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-## How to Use
+## Usage
 
-### Option 1: Automatic Build on Push
+### Automatic Build
 
-Simply push your code to the `main` branch:
+Push to `main`:
+
 ```bash
 git push origin main
 ```
 
-The workflow will automatically build installers for both platforms.
+Installers build automatically for both platforms.
 
-### Option 2: Create a Release
+### Create Release
 
-To create a GitHub Release with downloadable installers:
+Push a version tag:
 
-1. **Create and push a version tag:**
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
-2. **GitHub Actions will:**
-   - Build macOS and Windows installers
-   - Create a GitHub Release
-   - Attach the installers to the release
-   - Generate release notes
+GitHub Actions will:
 
-3. **Download installers from:**
-   - Go to your repository on GitHub
-   - Click "Releases" (right sidebar)
-   - Download the `.dmg` or `.msi` file
+- Build macOS and Windows installers
+- Create GitHub Release
+- Attach installers
+- Generate release notes
 
-### Option 3: Manual Trigger
+Download from: Repository → Releases
 
-1. Go to your repository on GitHub
-2. Click "Actions" tab
-3. Select "Build Native Installers" workflow
-4. Click "Run workflow" button
-5. Select the branch
-6. Click "Run workflow"
+### Manual Build
 
-## Accessing Build Artifacts
+1. Go to repository on GitHub
+2. Actions tab → Build Native Installers
+3. Run workflow → Select branch → Run
 
-After a workflow completes:
+## Download Artifacts
 
-1. Go to "Actions" tab in your GitHub repository
-2. Click on the completed workflow run
-3. Scroll to "Artifacts" section at the bottom
-4. Download:
-   - `macos-installer` - Contains the `.dmg` file
-   - `windows-installer` - Contains the `.msi` file
+From completed workflow:
+
+1. Actions tab → Select workflow run
+2. Scroll to Artifacts section
+3. Download `macos-installer` or `windows-installer`
 
 ## Requirements
 
-No additional setup required! The workflow uses:
-- GitHub-hosted runners (free for public repositories)
-- Java 17 (automatically installed)
-- Maven (automatically cached)
-- jpackage (included with JDK 17)
+None. Workflow uses:
+
+- GitHub-hosted runners
+- Java 17 (auto-installed)
+- Maven (auto-cached)
+- jpackage (included in JDK 17)
 
 ## Build Time
 
-Typical build times:
-- **macOS**: ~5-7 minutes
-- **Windows**: ~5-7 minutes
-- **Total**: ~10-15 minutes
+- macOS: ~5-7 minutes
+- Windows: ~5-7 minutes
 
-## What Gets Built
+## Installer Contents
 
-Both installers include:
-- The JavaFX frontend application
+Both include:
+
+- JavaFX frontend application
 - Embedded Java Runtime (JRE)
-- All required dependencies
+- All dependencies
 - Native launchers
 - Desktop shortcuts (optional)
 - Start menu entries (Windows)
 
-**Users do NOT need Java installed to run the application!**
+Users don't need Java installed.
 
-## Example Release Workflow
+## Example Workflow
 
 ```bash
-# 1. Make your changes
+# Make changes
 git add .
-git commit -m "Add new feature"
+git commit -m "Add feature"
 
-# 2. Push to main (builds artifacts)
+# Build artifacts
 git push origin main
 
-# 3. When ready for release, create a tag
+# Create release
 git tag v1.0.0
 git push origin v1.0.0
-
-# 4. Check GitHub Releases page for installers!
 ```
 
 ## Troubleshooting
 
-### Build Failed?
-
-Check the workflow logs:
-1. Go to "Actions" tab
-2. Click the failed workflow run
-3. Expand the failed step to see error details
-
-### Common Issues:
+**Build failed?**
+Actions tab → Failed run → Expand step for details
 
 **Maven build fails:**
-- Check `pom.xml` for syntax errors
-- Ensure all dependencies are available
+
+- Check `pom.xml` syntax
+- Verify dependencies available
 
 **jpackage fails:**
-- Verify main class name is correct
-- Check JAR file is created successfully
+
+- Verify main class name
+- Check JAR created successfully
 
 **Release not created:**
-- Ensure you pushed a tag starting with `v` (e.g., `v1.0.0`)
-- Check you have write permissions to the repository
+
+- Tag must start with `v`
+- Check write permissions
 
 ## Customization
 
-To customize the build:
+Edit `.github/workflows/build-releases.yml`:
 
-1. Edit `.github/workflows/build-releases.yml`
-2. Modify jpackage options
-3. Change version numbers
-4. Adjust artifact retention period
-5. Commit and push changes
+- Modify jpackage options
+- Change version numbers
+- Adjust artifact retention
 
-## Cost
+## Installation
 
-For public repositories: **FREE**
-- Unlimited build minutes
-- Unlimited artifact storage (30-day retention)
-
-For private repositories:
-- 2,000 free minutes/month
-- After that, pay-per-use pricing
-
-## Security
-
-Build artifacts are:
-- Scanned by GitHub
-- Stored securely
-- Only accessible to repository collaborators
-- Available for download for 30 days
-
-## Next Steps
-
-After downloading installers:
-- **macOS**: Open the `.dmg`, drag app to Applications
-- **Windows**: Run the `.msi` installer
-
+- **macOS**: Open `.dmg`, drag to Applications
+- **Windows**: Run `.msi` installer

@@ -1,41 +1,35 @@
 #!/bin/bash
 
-# Docker Build Script for Library Management System Backend
-# This script builds the Docker image for the backend
+# Docker Build Script - Library Management System Backend
 
 set -e
 
-echo "🐳 Building Library Management System Backend Docker Image..."
+echo "Building Docker Image for Backend"
 echo ""
 
-# Color codes for output
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Configuration
 IMAGE_NAME="library-backend"
 IMAGE_TAG="1.0.0"
 IMAGE_FULL="${IMAGE_NAME}:${IMAGE_TAG}"
 IMAGE_LATEST="${IMAGE_NAME}:latest"
 
-# Check if Docker is installed
+# Check Docker
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker is not installed. Please install Docker first."
+    echo "Docker not installed"
     exit 1
 fi
 
-# Check if Docker daemon is running
 if ! docker info &> /dev/null; then
-    echo "❌ Docker daemon is not running. Please start Docker."
+    echo "Docker daemon not running"
     exit 1
 fi
 
-echo -e "${BLUE}Building Docker image: ${IMAGE_FULL}${NC}"
+echo "Building ${IMAGE_FULL}..."
 echo ""
 
-# Build the Docker image
 docker build \
     --tag "${IMAGE_FULL}" \
     --tag "${IMAGE_LATEST}" \
@@ -43,18 +37,16 @@ docker build \
     .
 
 echo ""
-echo -e "${GREEN}Docker image built successfully!${NC}"
+echo -e "${GREEN}Build successful${NC}"
 echo ""
 
-# Display image information
-echo -e "${BLUE}Image Information:${NC}"
+echo "Image Information:"
 docker images "${IMAGE_NAME}" --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.CreatedAt}}"
 
 echo ""
-echo -e "${YELLOW}To run the container:${NC}"
+echo -e "${YELLOW}Run container:${NC}"
 echo "  docker run -d -p 8080:8080 --name library-backend ${IMAGE_FULL}"
 echo ""
 echo -e "${YELLOW}Or use Docker Compose:${NC}"
-echo "  cd .."
-echo "  docker-compose up -d"
+echo "  cd .. && docker-compose up -d"
 echo ""

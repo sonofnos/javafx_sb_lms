@@ -1,29 +1,25 @@
 #!/bin/bash
 
-# Build script for macOS native application
-# Creates a .app bundle and .dmg installer
+# macOS Build Script - Creates .app bundle and .dmg installer
 
-echo "=================================="
 echo "Building CBA LMS Test for macOS"
-echo "=================================="
 echo ""
 
-# Navigate to frontend directory
 cd "$(dirname "$0")/frontend"
 
-echo "Step 1: Cleaning previous builds..."
+echo "Cleaning previous builds..."
 mvn clean
 
 echo ""
-echo "Step 2: Compiling and packaging..."
+echo "Compiling and packaging..."
 mvn package -DskipTests
 
 echo ""
-echo "Step 3: Copying main JAR to libs folder..."
+echo "Copying JAR to libs..."
 cp target/library-management-frontend-1.0.0.jar target/libs/
 
 echo ""
-echo "Step 4: Creating macOS application bundle..."
+echo "Creating app bundle..."
 jpackage \
   --name "CBA LMS Test" \
   --app-version 1.0.0 \
@@ -38,7 +34,7 @@ jpackage \
   --java-options '-Xmx512m'
 
 echo ""
-echo "Step 5: Creating macOS .dmg installer..."
+echo "Creating .dmg installer..."
 jpackage \
   --name "CBA LMS Test" \
   --app-version 1.0.0 \
@@ -51,16 +47,11 @@ jpackage \
 cd ..
 
 echo ""
-echo "=================================="
-echo "Build Complete!"
-echo "=================================="
+echo "Build Complete"
 echo ""
-echo "Output location: frontend/target/dist/"
+echo "Output: frontend/target/dist/"
+echo "  - CBA LMS Test.app"
+echo "  - CBA LMS Test-1.0.0.dmg"
 echo ""
-echo "Files created:"
-echo "  - CBA LMS Test.app (macOS application bundle)"
-echo "  - CBA LMS Test-1.0.0.dmg (macOS installer)"
-echo ""
-echo "To install: Open the .dmg file and drag the app to Applications"
-echo ""
-echo "Note: Backend must be running at http://localhost:8080"
+echo "Install: Open .dmg and drag to Applications"
+echo "Note: Backend must run on http://localhost:8080"

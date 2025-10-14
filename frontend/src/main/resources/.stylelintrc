@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "property-no-vendor-prefix": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": [
+          "-fx-font-family",
+          "-fx-font-size",
+          "-fx-font-weight",
+          "-fx-background-color",
+          "-fx-background-radius",
+          "-fx-border-color",
+          "-fx-border-radius",
+          "-fx-border-width",
+          "-fx-padding",
+          "-fx-cursor",
+          "-fx-effect",
+          "-fx-scale-x",
+          "-fx-scale-y",
+          "-fx-text-fill",
+          "-fx-fill",
+          "-fx-cell-size",
+          "-fx-alignment"
+        ]
+      }
+    ]
+  }
+}
