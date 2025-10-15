@@ -100,7 +100,7 @@ jobs:
     - name: Create Windows Application
       run: |
         cd frontend
-        mkdir -p target/libs
+        New-Item -ItemType Directory -Force -Path target\libs
         copy target\library-management-frontend-1.0.0.jar target\libs\
         
         jpackage `
